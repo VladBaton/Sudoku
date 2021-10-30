@@ -15,12 +15,26 @@ SudokuMap::SudokuMap()
 			for (int k = 0; k < dim; k++)
 				map[j + 3 * i][k] = (k + 3 * j + i) % 9 + 1;
 }
-
 SudokuMap::~SudokuMap()
 {
 	for (int i = 0; i < dim; i++)
 		delete[] map[i];
-	delete[] map;
+	delete[] map; 
+}
+void SudokuMap::transpose()
+{
+	int** temp = new int* [dim];
+	for (int i = 0; i < dim; i++)
+		temp[i] = new int[dim];
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
+			temp[i][j] = map[j][i];
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
+			map[i][j] = temp[i][j];
+	for (int i = 0; i < dim; i++)
+		delete[] temp[i];
+	delete[] temp;
 }
 void SudokuMap::showMap() const
 {
