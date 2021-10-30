@@ -10,7 +10,10 @@ public:
 	SudokuMap();
 	~SudokuMap();
 	void transpose();
+	void swapRows();
+	void swapColumns();
 	void showMap() const;
 	friend bool TestConstructorSudokuMapReturnsStartMatrix();
+	friend bool TestTransposeReturnsTransposedMatrix();
 };
 #endif

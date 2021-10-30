@@ -36,6 +36,31 @@ void SudokuMap::transpose()
 		delete[] temp[i];
 	delete[] temp;
 }
+void SudokuMap::swapRows()
+{
+	srand(time(0));
+	int randRegion = rand() % 3;
+	int randRow1 = rand() % 3;
+	int randRow2 = 0;
+	do
+	{
+		int randRow2 = rand() % 3;
+	} while (randRow1 == randRow2);
+	int* temp = new int[dim];
+	for (int j = 0; j < dim; j++)
+		temp[j] = map[3 * randRegion + randRow1][j];
+	for (int j = 0; j < dim; j++)
+		map[3 * randRegion + randRow1][j] = map[3 * randRegion + randRow2][j];
+	for (int j = 0; j < dim; j++)
+		map[3 * randRegion + randRow2][j] = temp[j];
+	delete[] temp;
+}
+void SudokuMap::swapColumns()
+{
+	transpose();
+	swapRows();
+	transpose();
+}
 void SudokuMap::showMap() const
 {
 	for (int i = 0; i < 9; i++)
