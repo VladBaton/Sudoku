@@ -15,6 +15,13 @@ SudokuMap::SudokuMap()
 			for (int k = 0; k < dim; k++)
 				map[j + 3 * i][k] = (k + 3 * j + i) % 9 + 1;
 }
+
+SudokuMap::~SudokuMap()
+{
+	for (int i = 0; i < dim; i++)
+		delete[] map[i];
+	delete[] map;
+}
 void SudokuMap::showMap() const
 {
 	for (int i = 0; i < 9; i++)

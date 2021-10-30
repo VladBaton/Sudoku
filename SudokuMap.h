@@ -8,6 +8,7 @@ private:
 	int dim;
 public:
 	SudokuMap();
+	~SudokuMap();
 	void showMap() const;
 };
 #endif
