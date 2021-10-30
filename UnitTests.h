@@ -1,6 +1,5 @@
 #ifndef UNITTESTS
 #define UNITTESTS
-#include<time.h>
 
 const int testCount = 2;
 static bool (*testsPtr[testCount])();

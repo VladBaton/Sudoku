@@ -1,15 +1,11 @@
 #include<iostream>
-#include<stdio.h>
-#include<time.h>
 #include<iomanip>
-#include<chrono>
 #include"SudokuMap.h"
 #include"UnitTests.h"
 
 
 bool TestConstructorSudokuMapReturnsStartMatrix()
 {
-	auto begin = std::chrono::steady_clock::now();
 	SudokuMap testMap;
 	int StartMatrix[9][9] = {
 		{1,2,3,4,5,6,7,8,9},
