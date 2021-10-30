@@ -4,7 +4,8 @@
 class SudokuMap
 {
 private:
-	int map[9][9];
+	int** map;
+	int dim;
 public:
 	SudokuMap();
 	void showMap() const;
