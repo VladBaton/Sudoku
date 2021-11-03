@@ -15,5 +15,6 @@ public:
 	void showMap() const;
 	friend bool TestConstructorSudokuMapReturnsStartMatrix();
 	friend bool TestTransposeReturnsTransposedMatrix();
+	friend bool SwapRowsSwapsRows();
 };
 #endif

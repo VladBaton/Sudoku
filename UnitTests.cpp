@@ -45,11 +45,43 @@ bool TestTransposeReturnsTransposedMatrix()
 				return false;
 	return true;
 }
+bool SwapRowsSwapsRows()
+{
+	SudokuMap testMap, helpMap; 
+	testMap.swapRows();
+	int changedRow1 = -1, changedRow2;
+	for (int i = 0; i < testMap.dim; i++)
+		if (testMap.map[i][0] != helpMap.map[i][0] && changedRow1 == -1)
+			changedRow1 = i;
+		else if(testMap.map[i][0] != helpMap.map[i][0])
+			changedRow2 = i;
+	for (int i = 0; i < testMap.dim; i++)
+		if (i == changedRow1)
+			for (int j = 0; j < testMap.dim; j++)
+				if (testMap.map[i][j] != helpMap.map[changedRow2][j])
+					return false;
+				else
+					continue;
+		else if (i == changedRow2)
+			for (int j = 0; j < testMap.dim; j++)
+				if (testMap.map[i][j] != helpMap.map[changedRow1][j])
+					return false;
+				else
+					continue;
+		else
+			for (int j = 0; j < testMap.dim; j++)
+				if (testMap.map[i][j] != helpMap.map[i][j])
+					return false;
+				else
+					continue;
+	return true;
+}
 
 void testInit()
 {
 	testsPtr[0] = TestConstructorSudokuMapReturnsStartMatrix;
 	testsPtr[1] = TestTransposeReturnsTransposedMatrix;
+	testsPtr[2] = SwapRowsSwapsRows;
 }
 
 void showTests()
