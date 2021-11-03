@@ -13,6 +13,7 @@ public:
 	void swapRows();
 	void swapColumns();
 	void swapRowRegions();
+	void swapColumnRegions();
 	void showMap() const;
 	friend bool TestConstructorSudokuMapReturnsStartMatrix();
 	friend bool TestTransposeReturnsTransposedMatrix();

@@ -93,6 +93,12 @@ void SudokuMap::swapRowRegions()
 		delete[] tempRegion[i];
 	delete[] tempRegion;
 }
+void SudokuMap::swapColumnRegions()
+{
+	transpose();
+	swapRowRegions();
+	transpose();
+}
 void SudokuMap::showMap() const
 {
 	for (int i = 0; i < 9; i++)
