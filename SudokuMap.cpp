@@ -41,12 +41,14 @@ void SudokuMap::swapRows()
 	srand(time(0));
 	int randRegion = rand() % 3;
 	int randRow1 = rand() % 3;
-	int randRow2 = 0;
+	int randRow2; 
 	do
 	{
-		int randRow2 = rand() % 3;
+		randRow2 = rand() % 3;
 	} while (randRow1 == randRow2);
+
 	int* temp = new int[dim];
+
 	for (int j = 0; j < dim; j++)
 		temp[j] = map[3 * randRegion + randRow1][j];
 	for (int j = 0; j < dim; j++)
@@ -60,6 +62,36 @@ void SudokuMap::swapColumns()
 	transpose();
 	swapRows();
 	transpose();
+}
+void SudokuMap::swapRowRegions()
+{
+	srand(time(0));
+	int randRegion1 = rand() % 3;
+	int randRegion2;
+	do
+	{
+		randRegion2 = rand() % 3;
+	} while (randRegion1 == randRegion2);
+
+	int** tempRegion = new int*[3];
+	for (int i = 0; i < 3; i++)
+		tempRegion[i] = new int[9];
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < dim; j++)
+			tempRegion[i][j] = map[randRegion1 * 3 + i][j];
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < dim; j++)
+			map[randRegion1 * 3 + i][j] = map[randRegion2 * 3 + i][j];
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < dim; j++)
+			map[randRegion2 * 3 + i][j] = tempRegion[i][j];
+
+	for (int i = 0; i < 3; i++)
+		delete[] tempRegion[i];
+	delete[] tempRegion;
 }
 void SudokuMap::showMap() const
 {

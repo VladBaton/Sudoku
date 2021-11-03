@@ -49,11 +49,11 @@ bool SwapRowsSwapsRows()
 {
 	SudokuMap testMap, helpMap; 
 	testMap.swapRows();
-	int changedRow1 = -1, changedRow2;
+	int changedRow1 = -1, changedRow2 = -1;
 	for (int i = 0; i < testMap.dim; i++)
 		if (testMap.map[i][0] != helpMap.map[i][0] && changedRow1 == -1)
 			changedRow1 = i;
-		else if(testMap.map[i][0] != helpMap.map[i][0])
+		else if(testMap.map[i][0] != helpMap.map[i][0] && changedRow2 == -1)
 			changedRow2 = i;
 	for (int i = 0; i < testMap.dim; i++)
 		if (i == changedRow1)
@@ -76,12 +76,47 @@ bool SwapRowsSwapsRows()
 					continue;
 	return true;
 }
+bool SwapRowRegionsSwapsRowRegions()
+{
+	SudokuMap testMap, helpMap;
+	testMap.swapRowRegions();
+	int changedRowRegion1 = -1, changedRowRegion2;
+	for (int i = 0; i < 3; i++)
+		if (testMap.map[i * 3][0] != helpMap.map[i * 3][0] && changedRowRegion1 == -1)
+			changedRowRegion1 = i;
+		else if (testMap.map[i * 3][0] != helpMap.map[i * 3][0])
+			changedRowRegion2 = i;
+	for (int i = 0; i < 3; i++)
+		if (i == changedRowRegion1)
+			for (int j = 0; j < 3; j++)
+				for (int k = 0; k < 9; k++)
+					if (testMap.map[i * 3 + j][k] != helpMap.map[changedRowRegion2 * 3 + j][k])
+						return false;
+					else
+						continue;
+		else if (i == changedRowRegion2)
+			for (int j = 0; j < 3; j++)
+				for (int k = 0; k < 9; k++)
+					if (testMap.map[i * 3 + j][k] != helpMap.map[changedRowRegion1 * 3 + j][k])
+						return false;
+					else
+						continue;
+		else
+			for (int j = 0; j < 3; j++)
+				for (int k = 0; k < 9; k++)
+					if (testMap.map[i * 3 + j][k] != helpMap.map[i * 3 + j][k])
+						return false;
+					else
+						continue;
+	return true;
+}
 
 void testInit()
 {
 	testsPtr[0] = TestConstructorSudokuMapReturnsStartMatrix;
 	testsPtr[1] = TestTransposeReturnsTransposedMatrix;
 	testsPtr[2] = SwapRowsSwapsRows;
+	testsPtr[3] = SwapRowRegionsSwapsRowRegions;
 }
 
 void showTests()
