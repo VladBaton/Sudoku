@@ -99,6 +99,15 @@ void SudokuMap::swapColumnRegions()
 	swapRowRegions();
 	transpose();
 }
+const int* SudokuMap::operator[](unsigned int i) const
+{
+	return map[i];
+}
+int SudokuMap::giveDim() const
+{
+	return dim;
+}
+
 void SudokuMap::showMap() const
 {
 	for (int i = 0; i < 9; i++)
