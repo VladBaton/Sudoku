@@ -1,14 +1,16 @@
 #include<iostream>
 #include"SudokuMap.h"
 #include"UnitTests.h"
+#include"SudokuGame.h"
 
 
 int main()
 {
-	SudokuMap myMap;
-	myMap.showMap();
-	std::cout << std ::endl;
-	testInit();
-	showTests();
+	SudokuGame myGame;
+	myGame.show();
+	myGame.mixMap();
+	std::cout << std::endl;
+	myGame.show();
+	
 	return 0;
 }

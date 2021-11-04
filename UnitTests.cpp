@@ -110,6 +110,26 @@ bool SwapRowRegionsSwapsRowRegions()
 						continue;
 	return true;
 }
+bool OperatorStraightBracketsReturnsMapElem()
+{
+	SudokuMap testMap;
+	int StartMatrix[9][9] = {
+		{1,2,3,4,5,6,7,8,9},
+		{4,5,6,7,8,9,1,2,3},
+		{7,8,9,1,2,3,4,5,6},
+		{2,3,4,5,6,7,8,9,1},
+		{5,6,7,8,9,1,2,3,4},
+		{8,9,1,2,3,4,5,6,7},
+		{3,4,5,6,7,8,9,1,2},
+		{6,7,8,9,1,2,3,4,5},
+		{9,1,2,3,4,5,6,7,8}
+	};
+	for (int i = 0; i < 9; i++)
+		for (int j = 0; j < 9; j++)
+			if (StartMatrix[i][j] != testMap[i][j])
+				return false;
+	return true;
+}
 
 void testInit()
 {
@@ -117,6 +137,7 @@ void testInit()
 	testsPtr[1] = TestTransposeReturnsTransposedMatrix;
 	testsPtr[2] = SwapRowsSwapsRows;
 	testsPtr[3] = SwapRowRegionsSwapsRowRegions;
+	testsPtr[4] = OperatorStraightBracketsReturnsMapElem;
 }
 
 void showTests()
