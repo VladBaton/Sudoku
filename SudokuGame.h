@@ -9,5 +9,6 @@ public:
 	SudokuGame();
 	~SudokuGame();
 	void mixMap();
+	void setGame();
 	void show() const;
 };

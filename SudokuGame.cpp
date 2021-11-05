@@ -24,7 +24,7 @@ SudokuGame::~SudokuGame()
 void SudokuGame::mixMap()
 {
 	srand(time(0));
-	for (int i = 0; i < 99; i++)
+	for (int i = 0; i < 999; i++)
 	{
 		int randomAction = rand() % 5;
 		switch (randomAction)
@@ -36,6 +36,67 @@ void SudokuGame::mixMap()
 		case 4: SudokuMap :: swapColumnRegions(); break;
 		}
 	}
+}
+
+void SudokuGame::setGame()
+{
+	srand(time(0));
+	bool** isViewed = new bool*[giveDim()];
+	for (int i = 0; i < giveDim(); i++)
+		isViewed[i] = new bool[giveDim()];
+	for (int i = 0; i < giveDim(); i++)
+		for (int j = 0; j < giveDim(); j++)
+			isViewed[i][j] = false;
+
+	do
+	{
+		bool isAllElemViewed = true;
+		for (int i = 0; i < giveDim(); i++)
+			for (int j = 0; j < giveDim(); j++)
+				if (isViewed[i][j] != true)
+					isAllElemViewed = false;
+		if (isAllElemViewed)
+			break;
+
+		int randomI = rand() % giveDim();
+		int randomJ = rand() % giveDim();
+		isViewed[randomI][randomJ] = true;
+		isVisible[randomI][randomJ] = false;
+
+		bool* setOfVisibleNeighbors = new bool[giveDim()];
+		for (int i = 0; i < giveDim(); i++)
+			setOfVisibleNeighbors[i] = false;
+
+		for (int j = 0; j < giveDim(); j++)
+			if (isVisible[randomI][j])
+				setOfVisibleNeighbors[SudokuMap::operator[](randomI)[j] - 1] = true;
+
+		for (int i = 0; i < giveDim(); i++)
+			if (isVisible[i][randomJ])
+				setOfVisibleNeighbors[SudokuMap::operator[](i)[randomJ] - 1] = true;
+
+		int iRegion = randomI / 3;
+		int jRegion = randomJ / 3;
+		for (int iInReg = 0; iInReg < 3; iInReg++)
+			for (int jInReg = 0; jInReg < 3; jInReg++)
+				if (isVisible[iRegion * 3 + iInReg][jRegion * 3 + jInReg])
+					setOfVisibleNeighbors[SudokuMap::operator[](iRegion * 3 + iInReg)[jRegion * 3 + jInReg] - 1] = true;
+
+		int falseCount = 0;
+		for (int i = 0; i < giveDim(); i++)
+			if (setOfVisibleNeighbors[i] == false)
+				falseCount++;
+
+		if (falseCount != 1)
+			isVisible[randomI][randomJ] = true;
+
+		delete[] setOfVisibleNeighbors;
+	} while (true);
+
+	for (int i = 0; i < giveDim(); i++)
+		delete[] isViewed[i];
+	delete[] isViewed;
+
 }
 
 void SudokuGame::show() const
