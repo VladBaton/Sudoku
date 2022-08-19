@@ -2,6 +2,8 @@
 #include<time.h>
 #include"SudokuMap.h"
 #include<iomanip>
+#include<string.h>
+#include<fstream>
 
 SudokuMap::SudokuMap()
 {
@@ -14,6 +16,27 @@ SudokuMap::SudokuMap()
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < dim; k++)
 				map[j + 3 * i][k] = (k + 3 * j + i) % 9 + 1;
+}
+SudokuMap::SudokuMap(std :: string file)
+{
+	std::ifstream mapInputStream(file);
+	if (!mapInputStream)
+	{
+		char message[150] = "Ex in SudokuMap::SudokuMap: file ";
+		strcat_s(message, file.c_str());
+		strcat_s(message, " does not exist");
+		throw std::exception(message);
+	}
+	mapInputStream >> dim;
+	map = new int* [dim];
+	for (int i = 0; i < dim; i++)
+		map[i] = new int[dim] {}; // insert zeroes
+	/*for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
+			map[i][j] = 0;*/
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
+			mapInputStream >> map[i][j];
 }
 SudokuMap::~SudokuMap()
 {
@@ -99,9 +122,22 @@ void SudokuMap::swapColumnRegions()
 	swapRowRegions();
 	transpose();
 }
-const int* SudokuMap::operator[](unsigned int i) const
+const int* const SudokuMap::operator[](unsigned int i) const
 {
 	return map[i];
+}
+void SudokuMap::operator=(SudokuMap& second)
+{
+	for (int i = 0; i < dim; i++)
+		delete[] map[i];
+	delete[] map;
+	dim = second.dim;
+	map = new int* [dim];
+	for (int i = 0; i < dim; i++)
+		map[i] = new int[dim];
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
+			map[i][j] = second[i][j];
 }
 int SudokuMap::giveDim() const
 {

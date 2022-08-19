@@ -2,6 +2,8 @@
 #include<iostream>
 #include<iomanip>
 #include<time.h>
+#include<fstream>
+#include<cstring> // for strcat
 
 SudokuGame :: SudokuGame() : SudokuMap()
 {
@@ -12,6 +14,35 @@ SudokuGame :: SudokuGame() : SudokuMap()
 		for (int j = 0; j < giveDim(); j++)
 			isVisible[i][j] = true;
 	}
+}
+
+SudokuGame::SudokuGame(std :: string file)
+{
+	std::ifstream inputIsVisibleStream("dat.dat", std::ios_base::in);
+	if (!inputIsVisibleStream)
+	{
+		char message[150] = "Ex in SudokuGame::SudokuGame: file ";
+		strcat_s(message, file.c_str());
+		strcat_s(message, " does not exist");
+		throw std::exception(message);
+	}
+	SudokuMap tempMap(file);
+	SudokuMap::operator=(tempMap);
+	isVisible = new bool* [giveDim()];
+	for (int i = 0; i < giveDim(); i++)
+	{
+		isVisible[i] = new bool[giveDim()];
+		for (int j = 0; j < giveDim(); j++)
+			isVisible[i][j] = true;
+	}
+	char temp;
+	inputIsVisibleStream >> temp;
+	for (int i = 0; i < giveDim(); i++)
+		for (int j = 0; j < giveDim(); j++)
+			inputIsVisibleStream >> temp;
+	for (int i = 0; i < giveDim(); i++)
+		for (int j = 0; j < giveDim(); j++)
+			inputIsVisibleStream >> isVisible[i][j];
 }
 
 SudokuGame::~SudokuGame()
@@ -121,4 +152,36 @@ void SudokuGame::show() const
 			std::cout << std::endl;
 		}
 	}
+}
+
+void SudokuGame::saveGame() const
+{
+	std::ofstream saveStream("dat.dat", std :: ios_base :: trunc);
+	saveStream << giveDim() << std :: endl;
+	for (int i = 0; i < giveDim(); i++)
+	{
+		for (int j = 0; j < giveDim(); j++)
+			saveStream << SudokuMap::operator[](i)[j] << ' ';
+		saveStream << std :: endl;
+	}
+	saveStream << std::endl;
+	for (int i = 0; i < giveDim(); i++)
+	{
+		for (int j = 0; j < giveDim(); j++)
+			saveStream << isVisible[i][j] << ' ';
+		saveStream << std::endl;
+	}
+}
+
+bool SudokuGame::insertNumber(int number, int row, int column)
+// Tryes to insert number into sudokuMap. Return 1 if succeed, 0 otherwise.
+{
+	if (isVisible[row][column] == true)
+		return false;
+	if (this->operator[](row)[column] == number) // disgusting.
+	{
+		isVisible[row][column] = true;
+		return true;
+	}
+	return false;
 }
