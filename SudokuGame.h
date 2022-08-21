@@ -1,6 +1,8 @@
 #pragma once
 #include"SudokuMap.h"
 #include<string>
+#include<tuple>
+#include"drawSudoku.h"
 
 
 class SudokuGame : public SudokuMap
@@ -16,4 +18,5 @@ public:
 	void saveGame() const;
 	void show() const;
 	bool insertNumber(int number, int row, int column);
+	std::tuple<Cell**, int> getMap();
 };

@@ -5,13 +5,13 @@
 #include<fstream>
 #include<cstring> // for strcat
 
-SudokuGame :: SudokuGame() : SudokuMap()
+SudokuGame :: SudokuGame() : SudokuMap(), isVisible(new bool*[giveDim()])
 {
-	isVisible = new bool*[giveDim()];
-	for (int i = 0; i < giveDim(); i++)
+	int dim = giveDim();
+	for (int i = 0; i < dim; i++)
 	{
-		isVisible[i] = new bool[giveDim()];
-		for (int j = 0; j < giveDim(); j++)
+		isVisible[i] = new bool[dim];
+		for (int j = 0; j < dim; j++)
 			isVisible[i][j] = true;
 	}
 }
@@ -28,20 +28,21 @@ SudokuGame::SudokuGame(std :: string file)
 	}
 	SudokuMap tempMap(file);
 	SudokuMap::operator=(tempMap);
-	isVisible = new bool* [giveDim()];
-	for (int i = 0; i < giveDim(); i++)
+	int dim = giveDim();
+	isVisible = new bool* [dim];
+	for (int i = 0; i < dim; i++)
 	{
-		isVisible[i] = new bool[giveDim()];
-		for (int j = 0; j < giveDim(); j++)
+		isVisible[i] = new bool[dim];
+		for (int j = 0; j < dim; j++)
 			isVisible[i][j] = true;
 	}
 	char temp;
 	inputIsVisibleStream >> temp;
-	for (int i = 0; i < giveDim(); i++)
-		for (int j = 0; j < giveDim(); j++)
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
 			inputIsVisibleStream >> temp;
-	for (int i = 0; i < giveDim(); i++)
-		for (int j = 0; j < giveDim(); j++)
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
 			inputIsVisibleStream >> isVisible[i][j];
 }
 
@@ -54,7 +55,7 @@ SudokuGame::~SudokuGame()
 
 void SudokuGame::mixMap()
 {
-	srand(time(0));
+	srand(static_cast<unsigned int>(time(0)));
 	for (int i = 0; i < 999; i++)
 	{
 		int randomAction = rand() % 5;
@@ -71,38 +72,39 @@ void SudokuGame::mixMap()
 
 void SudokuGame::setGame()
 {
-	srand(time(0));
-	bool** isViewed = new bool*[giveDim()];
-	for (int i = 0; i < giveDim(); i++)
-		isViewed[i] = new bool[giveDim()];
-	for (int i = 0; i < giveDim(); i++)
-		for (int j = 0; j < giveDim(); j++)
+	srand(static_cast<unsigned int>(time(0)));
+	int dim = giveDim();
+	bool** isViewed = new bool*[dim];
+	for (int i = 0; i < dim; i++)
+		isViewed[i] = new bool[dim];
+	for (int i = 0; i < dim; i++)
+		for (int j = 0; j < dim; j++)
 			isViewed[i][j] = false;
 
 	do
 	{
 		bool isAllElemViewed = true;
-		for (int i = 0; i < giveDim(); i++)
-			for (int j = 0; j < giveDim(); j++)
+		for (int i = 0; i < dim; i++)
+			for (int j = 0; j < dim; j++)
 				if (isViewed[i][j] != true)
 					isAllElemViewed = false;
 		if (isAllElemViewed)
 			break;
 
-		int randomI = rand() % giveDim();
-		int randomJ = rand() % giveDim();
+		int randomI = rand() % dim;
+		int randomJ = rand() % dim;
 		isViewed[randomI][randomJ] = true;
 		isVisible[randomI][randomJ] = false;
 
-		bool* setOfVisibleNeighbors = new bool[giveDim()];
-		for (int i = 0; i < giveDim(); i++)
+		bool* setOfVisibleNeighbors = new bool[dim];
+		for (int i = 0; i < dim; i++)
 			setOfVisibleNeighbors[i] = false;
 
-		for (int j = 0; j < giveDim(); j++)
+		for (int j = 0; j < dim; j++)
 			if (isVisible[randomI][j])
 				setOfVisibleNeighbors[SudokuMap::operator[](randomI)[j] - 1] = true;
 
-		for (int i = 0; i < giveDim(); i++)
+		for (int i = 0; i < dim; i++)
 			if (isVisible[i][randomJ])
 				setOfVisibleNeighbors[SudokuMap::operator[](i)[randomJ] - 1] = true;
 
@@ -114,7 +116,7 @@ void SudokuGame::setGame()
 					setOfVisibleNeighbors[SudokuMap::operator[](iRegion * 3 + iInReg)[jRegion * 3 + jInReg] - 1] = true;
 
 		int falseCount = 0;
-		for (int i = 0; i < giveDim(); i++)
+		for (int i = 0; i < dim; i++)
 			if (setOfVisibleNeighbors[i] == false)
 				falseCount++;
 
@@ -124,7 +126,7 @@ void SudokuGame::setGame()
 		delete[] setOfVisibleNeighbors;
 	} while (true);
 
-	for (int i = 0; i < giveDim(); i++)
+	for (int i = 0; i < dim; i++)
 		delete[] isViewed[i];
 	delete[] isViewed;
 
@@ -132,9 +134,10 @@ void SudokuGame::setGame()
 
 void SudokuGame::show() const
 {
-	for (int i = 0; i < giveDim(); i++)
+	int dim = giveDim();
+	for (int i = 0; i < dim; i++)
 	{
-		for (int j = 0; j < giveDim(); j++)
+		for (int j = 0; j < dim; j++)
 		{
 			if (j % 3 == 0)
 				std::cout << '|';
@@ -156,18 +159,19 @@ void SudokuGame::show() const
 
 void SudokuGame::saveGame() const
 {
+	int dim = giveDim();
 	std::ofstream saveStream("dat.dat", std :: ios_base :: trunc);
-	saveStream << giveDim() << std :: endl;
-	for (int i = 0; i < giveDim(); i++)
+	saveStream << dim << std :: endl;
+	for (int i = 0; i < dim; i++)
 	{
 		for (int j = 0; j < giveDim(); j++)
 			saveStream << SudokuMap::operator[](i)[j] << ' ';
 		saveStream << std :: endl;
 	}
 	saveStream << std::endl;
-	for (int i = 0; i < giveDim(); i++)
+	for (int i = 0; i < dim; i++)
 	{
-		for (int j = 0; j < giveDim(); j++)
+		for (int j = 0; j < dim; j++)
 			saveStream << isVisible[i][j] << ' ';
 		saveStream << std::endl;
 	}
@@ -184,4 +188,23 @@ bool SudokuGame::insertNumber(int number, int row, int column)
 		return true;
 	}
 	return false;
+}
+
+std::tuple<Cell**, int> SudokuGame::getMap()
+{
+	int dim = giveDim();
+	Cell** cells = new Cell*[dim];
+	for (int i = 0; i < dim; i++)
+		cells[i] = new Cell[dim];
+	for (int i = 0; i < dim; i++)
+	{
+		for (int j = 0; j < dim; j++)
+		{
+			cells[i][j].rectangle.setPosition(static_cast<float>(50 * j), static_cast<float>(50 * i));
+			if (isVisible[i][j] == true)
+				cells[i][j].value = this->operator[](i)[j];
+		}
+	}
+
+	return std::make_tuple(cells, dim);
 }
