@@ -48,7 +48,8 @@ SudokuGame::SudokuGame(std :: string file)
 
 SudokuGame::~SudokuGame()
 {
-	for (int i = 0; i < giveDim(); i++)
+	int dim = giveDim();
+	for (int i = 0; i < dim; i++)
 		delete[] isVisible[i];
 	delete[] isVisible;
 }
@@ -61,11 +62,12 @@ void SudokuGame::mixMap()
 		int randomAction = rand() % 5;
 		switch (randomAction)
 		{
-		case 0: SudokuMap :: transpose(); break;
-		case 1: SudokuMap :: swapRows(); break;
-		case 2: SudokuMap :: swapColumns(); break;
-		case 3: SudokuMap :: swapRowRegions(); break;
-		case 4: SudokuMap :: swapColumnRegions(); break;
+		//case 0: SudokuMap :: transpose(); break;
+		case 0:this->transpose(); break;
+		case 1:this->swapRows(); break;
+		case 2:this->swapColumns(); break;
+		case 3:this->swapRowRegions(); break;
+		case 4:this->swapColumnRegions(); break;
 		}
 	}
 }

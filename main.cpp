@@ -14,14 +14,19 @@ int main()
 	try
 	{
 		sf::RenderWindow window(sf::VideoMode(450, 450), "Sudoku");
-		menu(window);
-		SudokuGame gama("dat.dat");
+		bool isNewGame = menu(window);
+		SudokuGame gama;
+		if (isNewGame)
+		{
+			gama.mixMap();
+			gama.setGame();
+		}
+		else
+			gama = *(new SudokuGame("dat.dat"));
 		Cell** cells; int dim;
 		std::tie(cells, dim) = gama.getMap();
 		sf::Vector2i redCell = { -1,0 };
 		sf::Vector2i clickedCell = { -1,0 }; //keeps coords of Cell that had been clicked
-		//std::tuple<int, int> redCell{ -1,0 };
-		//std::tuple<int, int> clickedCell{ -1,0 }; // keeps coords of Cell that had been clicked
 		bool isValueChanged = false; // True if user changed value of Cell and didnt press enter yet
 		while (window.isOpen())
 		{
